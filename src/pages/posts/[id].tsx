@@ -1,10 +1,19 @@
-import Layout from '../../components/layout'
-import { getAllPostIds, getPostData } from '../../lib/posts'
-import Head from 'next/head'
-import Date from '../../components/date'
-import utilStyles from '/src/styles/utils.module.css'
+import Layout from "../../components/layout";
+import { getAllPostIds, getPostData } from "../../lib/posts";
+import Head from "next/head";
+import Date from "../../components/date";
+import utilStyles from "/src/styles/utils.module.css";
 
-export default function Post({ postData }) {
+type Props = {
+  postData: {
+    id: number;
+    title: string;
+    date: Date;
+    contentHtml: string;
+  };
+};
+
+const Post: React.FC<Props> = ({ postData }) => {
   return (
     <Layout home>
       <Head>
@@ -18,8 +27,8 @@ export default function Post({ postData }) {
         <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
       </article>
     </Layout>
-  )
-}
+  );
+};
 
 // export async function getStaticPaths() {
 //   const paths = getAllPostIds()
@@ -38,21 +47,23 @@ export default function Post({ postData }) {
 //   }
 // }
 
-import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
+import { GetStaticProps, GetStaticPaths } from "next";
 
-export const getStaticProps: GetStaticProps = async ({params}) => {
-  const postData = await getPostData(params.id)
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const postData = await getPostData(params.id);
   return {
     props: {
-      postData
-    }
-  }
-}
+      postData,
+    },
+  };
+};
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = getAllPostIds()
+  const paths = getAllPostIds();
   return {
     paths,
-    fallback: false
-  }
-}
+    fallback: false,
+  };
+};
+
+export default Post;
